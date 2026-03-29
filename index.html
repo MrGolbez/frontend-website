@@ -6,15 +6,16 @@
     <title>Marty Crane Jr - Cloud Solutions Architect</title>
     <style>
         :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #34495e;
+            --primary-color: #2b3a42;
+            --secondary-color: #3f5765;
             --accent-color: #0078D4; /* Azure Blue */
-            --text-color: #333;
-            --bg-color: #f9f9f9;
+            --text-color: #333333;
+            --bg-color: #f4f7f6;
+            --container-bg: #ffffff;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             line-height: 1.6;
             color: var(--text-color);
             background-color: var(--bg-color);
@@ -22,61 +23,90 @@
             padding: 20px;
         }
 
-        .resume-container {
-            max-width: 800px;
+        .container {
+            max-width: 900px;
             margin: 0 auto;
-            background: #fff;
-            padding: 40px;
+            background: var(--container-bg);
+            padding: 50px;
             border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
         }
 
         header {
             text-align: center;
-            border-bottom: 2px solid var(--primary-color);
-            padding-bottom: 20px;
+            border-bottom: 3px solid var(--accent-color);
+            padding-bottom: 25px;
             margin-bottom: 30px;
         }
 
         h1 {
+            margin: 0;
             color: var(--primary-color);
-            margin-bottom: 5px;
-            font-size: 2.5em;
+            font-size: 2.8em;
+            letter-spacing: 1px;
         }
 
         .contact-info {
-            font-size: 0.9em;
-            color: var(--secondary-color);
+            font-size: 0.95em;
+            color: #555;
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
         }
 
         .contact-info a {
             color: var(--accent-color);
             text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .contact-info a:hover {
+            color: var(--primary-color);
+            text-decoration: underline;
         }
 
         h2 {
-            color: var(--accent-color);
-            border-bottom: 1px solid #eee;
-            padding-bottom: 5px;
-            margin-top: 30px;
+            color: var(--secondary-color);
+            border-bottom: 2px solid #eaeaea;
+            padding-bottom: 8px;
+            margin-top: 35px;
+            font-size: 1.4em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        h3 {
-            color: var(--primary-color);
+        .section-item {
+            margin-bottom: 25px;
+        }
+
+        .flex-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
             margin-bottom: 5px;
         }
 
-        .job-title {
-            font-weight: bold;
+        .job-title, .project-title {
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.15em;
         }
 
-        .date {
-            float: right;
+        .company, .date {
+            font-weight: 600;
             color: #666;
-            font-style: italic;
+        }
+
+        p {
+            margin-top: 5px;
+            margin-bottom: 15px;
         }
 
         ul {
+            margin-top: 5px;
             padding-left: 20px;
         }
 
@@ -84,103 +114,150 @@
             margin-bottom: 8px;
         }
 
-        .skills-category {
-            font-weight: bold;
+        .skills-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .skills-category strong {
             color: var(--primary-color);
+        }
+
+        .counter-section {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px dashed #ccc;
+            font-size: 0.9em;
+            color: #777;
+        }
+
+        @media (min-width: 768px) {
+            .skills-grid {
+                grid-template-columns: 1fr 1fr;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="container">
+        <header>
+            <h1>Marty Crane Jr</h1>
+            <div class="contact-info">
+                <span>Long Beach, CA</span>
+                <span>925-667-6259</span>
+                <a href="mailto:Marty.crane.jr@gmail.com">Marty.crane.jr@gmail.com</a>
+                <a href="https://linkedin.com/in/martycrane/" target="_blank">LinkedIn</a>
+                <a href="https://github.com/MrGolbez" target="_blank">GitHub</a>
+            </div>
+        </header>
 
-<div class="resume-container">
-    <header>
-        <h1>Marty Crane Jr</h1>
-        <div class="contact-info">
-            Long Beach, CA | 925-667-6259 | Marty.crane.jr@gmail.com | <a href="https://linkedin.com/in/martycrane/" target="_blank">linkedin.com/in/martycrane/</a>
-        </div>
-    </header>
+        <section>
+            <h2>Professional Summary</h2>
+            <p>High-impact Cloud Solutions Architect and Site Reliability Engineering (SRE) professional with an MS in Cybersecurity and strong foundational expertise in Microsoft Azure. Proven ability to design secure, highly available infrastructure, automate CI/CD deployments, and bridge the gap between technical operations and client business requirements. Adept at implementing secure cloud architectures, managing multi-tier applications, and leveraging Infrastructure as Code (IaC) to drive enterprise scalability and compliance.</p>
+        </section>
 
-    <section>
-        <h2>Professional Summary</h2>
-        <p>Cloud Solutions Architect and Cybersecurity Professional (Associate of ISC2 CISSP) with an MS in Cybersecurity and a strong foundation in enterprise IT and client consulting. Proven ability to translate complex business requirements into scalable, secure cloud configurations and automate workflows. Adept at designing cloud-native architectures, managing secure Azure infrastructure, and collaborating with diverse stakeholders to drive technical adoption and ensure strict security compliance.</p>
-    </section>
+        <section>
+            <h2>Education</h2>
+            <div class="section-item">
+                <div class="flex-heading">
+                    <span class="job-title">California State University Dominguez Hills</span>
+                    <span class="date">December 2025</span>
+                </div>
+                <p>Master of Science in Cybersecurity & BA Computer Technology (Honors)</p>
+            </div>
+        </section>
 
-    <section>
-        <h2>Technical Skills</h2>
-        <ul>
-            <li><span class="skills-category">Cloud Architecture & Infrastructure:</span> Microsoft Azure, Hub-and-Spoke Network Topology, Virtual Networks (VNet) & Peering, High Availability (HA) Design, Infrastructure as Code (IaC), ARM Templates, Azure Bicep, Serverless Architecture, Azure Storage, Docker Containerization.</li>
-            <li><span class="skills-category">Cloud Security & Governance:</span> Zero Trust Architecture, Identity & Access Management (IAM), Microsoft Entra ID (Azure AD), Role-Based Access Control (RBAC), Azure Policy, Network Security Groups (NSGs), User-Defined Routes (UDRs), Threat Modeling, Regulatory Compliance (NIST, CIS).</li>
-            <li><span class="skills-category">Cybersecurity & Threat Management:</span> Vulnerability Management, SIEM Log Analysis, Endpoint Detection and Response (EDR), Intrusion Prevention Systems (IPS), Secure Multi-Factor Authentication (MFA/Duo), Security Baselines, Incident Lifecycle Management.</li>
-            <li><span class="skills-category">Enterprise IT & Networking:</span> Active Directory Domain Services (AD DS), Group Policy Objects (GPOs), TCP/IP Networking, Cisco Routing & Switching, VPN Configuration, DNS/DHCP Management, Patch Management, Windows Server 2022, Unix/Linux Environments.</li>
-            <li><span class="skills-category">Architecture Leadership & Consulting:</span> Technical Account Management, Business-to-Technical Translation, Stakeholder Communication, Workflow Automation, Technical Demonstrations, ITIL Frameworks, ServiceNow, SLA Management.</li>
-        </ul>
-    </section>
-
-    <section>
-        <h2>Certifications</h2>
-        <ul>
-            <li>Microsoft Certified: Azure Administrator Associate (AZ-104)</li>
-            <li>ISC2 CISSP – Associate</li>
-            <li>CompTIA CySA+ | Security+ | Network+ | A+</li>
-        </ul>
-    </section>
-
-    <section>
-        <h2>Professional Experience</h2>
-        
-        <div class="job">
-            <h3>Yardi Systems</h3>
-            <p><span class="job-title">Associate Technical Account Manager</span> <span class="date">March 2025 – Present</span></p>
+        <section>
+            <h2>Certifications</h2>
             <ul>
-                <li>Architected and deployed scalable enterprise SaaS solutions, leveraging Virtuoso AI Agents to automate complex client workflows and seamlessly integrate with existing infrastructure.</li>
-                <li>Acted as the primary Solutions Architect for the StorageCafe suite, leading technical workshops to translate complex business requirements into secure, cloud-based configurations that drove product adoption.</li>
-                <li>Ensured backend data integrity and system reliability for high-stakes enterprise portfolios by engineering custom SQL solutions to resolve complex database anomalies.</li>
-                <li>Directed the end-to-end technical implementation of concurrent enterprise deployments, serving as the lead technical advisor to troubleshoot architecture blockers and ensure smooth cloud adoption.</li>
+                <li><strong>Certifications:</strong> (ISC)² CISSP – Associate | CompTIA CySA+ | Security+ | Network+ | A+</li>
+                <li><strong>In Progress:</strong> Microsoft Certified: Azure Administrator Associate (AZ-104)</li>
             </ul>
-        </div>
+        </section>
 
-        <div class="job">
-            <h3>Taco Bell</h3>
-            <p><span class="job-title">Service Desk Analyst L1 (Network & Systems Support)</span> <span class="date">September 2024 – March 2025</span></p>
-            <ul>
-                <li>Achieved <10-minute average restoration time for critical outages by troubleshooting Cisco routers, switches, and VPNs.</li>
-                <li>Provisioned enterprise restaurant equipment and resolved connectivity blockers by troubleshooting Docker container deployments and remote OS updates.</li>
-                <li>Managed the lifecycle of 140+ weekly incidents using ServiceNow & ITIL frameworks to ensure 24/7 business continuity.</li>
-            </ul>
-        </div>
+        <section>
+            <h2>Technical Skills</h2>
+            <div class="skills-grid">
+                <div class="skills-category">
+                    <p><strong>Cloud Architecture & SRE:</strong> Microsoft Azure (VNETs, NSGs, App Services, Functions), Serverless Computing, High Availability Design, Edge Routing (CDN, Cloudflare, DNS)</p>
+                </div>
+                <div class="skills-category">
+                    <p><strong>DevOps & Automation:</strong> CI/CD Pipelines (Jenkins, GitHub Actions), Infrastructure as Code (Bicep/Terraform), Configuration Management (Ansible), Docker, Kubernetes</p>
+                </div>
+                <div class="skills-category">
+                    <p><strong>Systems & Databases:</strong> Windows Server 2022, IIS, Linux (Ubuntu/CentOS), MS SQL Server, Cosmos DB</p>
+                </div>
+                <div class="skills-category">
+                    <p><strong>Security & Identity:</strong> Entra ID (Azure AD), Identity & Access Management (IAM), Zero Trust Architecture, Role-Based Access Control (RBAC)</p>
+                </div>
+            </div>
+        </section>
 
-        <div class="job">
-            <h3>CSUDH Information Technology</h3>
-            <p><span class="job-title">IT Support Specialist</span> <span class="date">August 2023 – August 2024</span></p>
-            <ul>
-                <li>Administered security policies via Duo Mobile and Entra ID, delivering live technical support troubleshooting MFA protocols.</li>
-                <li>Secured digital access for over 15,000+ faculty and students by streamlining deployment of MFA protocols, ensuring 100% compliance with campus-wide security mandates.</li>
-                <li>Reduced the technical backlog by 75% through effective triage and technical communication with a diverse user base.</li>
-            </ul>
-        </div>
-    </section>
+        <section>
+            <h2>Professional Experience</h2>
+            
+            <div class="section-item">
+                <div class="flex-heading">
+                    <span class="job-title">Associate Technical Account Manager</span>
+                    <span class="date">March 2025 – Present</span>
+                </div>
+                <div class="company">Yardi Systems</div>
+                <ul>
+                    <li>Orchestrate the end-to-end implementation and architecture design for 3-5 simultaneous enterprise clients utilizing the StorageCafe product suite within strict compliance environments.</li>
+                    <li>Drive the technical deployment of AI agents (Virtuoso AI) into client workflows, bridging the gap between backend cloud infrastructure and front-end business requirements.</li>
+                    <li>Troubleshoot complex database anomalies using custom SQL, ensuring data integrity and high availability across multi-tier, globally distributed client environments.</li>
+                    <li>Enforce strict IAM baselines by configuring YardiOne Single Sign-On (SSO) authentication, establishing secure, role-based access controls for enterprise user groups.</li>
+                </ul>
+            </div>
 
-    <section>
-        <h2>Technical Projects</h2>
-        
-        <div class="project">
-            <h3>Enterprise Azure Infrastructure & Governance (Master’s Capstone)</h3>
-            <p><span class="date">December 2025 - Present</span></p>
-            <ul>
-                <li>Designed a cloud-native network with Hub-and-Spoke topology with VNET Peering to validate secure, scalable cloud migrations.</li>
-                <li>Automated the provisioning of high-availability Virtual Machines and Storage Accounts using Bicep and ARM templates.</li>
-                <li>Secured cloud assets by implementing Network Security Groups (NSGs), User Defined Routes (UDRs), and Azure Policy to enforce strict compliance guardrails.</li>
-            </ul>
-        </div>
-    </section>
+            <div class="section-item">
+                <div class="flex-heading">
+                    <span class="job-title">Service Desk Analyst L1 (Network & Systems Support)</span>
+                    <span class="date">September 2024 – March 2025</span>
+                </div>
+                <div class="company">Taco Bell</div>
+                <ul>
+                    <li>Managed the lifecycle of 140+ weekly incidents using ServiceNow and ITIL frameworks to ensure 24/7 business continuity for critical retail operations.</li>
+                    <li>Achieved a <10-minute average restoration time for network outages by troubleshooting Cisco routers, switches, and VPNs, maintaining strict access controls and secure communications.</li>
+                </ul>
+            </div>
 
-    <section>
-        <h2>Education</h2>
-        <ul>
-            <li><strong>CSU Dominguez Hills</strong> | Master of Science in Cybersecurity (December 2025) & BA Computer Technology (Honors)</li>
-        </ul>
-    </section>
-</div>
+            <div class="section-item">
+                <div class="flex-heading">
+                    <span class="job-title">IT Support Specialist</span>
+                    <span class="date">August 2023 – August 2024</span>
+                </div>
+                <div class="company">CSUDH Information Technology</div>
+                <ul>
+                    <li>Administered security policies via Duo Mobile and Entra ID, enforcing strict identity management and access control measures across a sprawling university network.</li>
+                    <li>Secured digital access for over 15,000+ faculty and students by streamlining the deployment of MFA protocols, ensuring 100% compliance with campus-wide security mandates.</li>
+                </ul>
+            </div>
+        </section>
 
-</body>
-</html>
+        <section>
+            <h2>Technical Projects</h2>
+            
+            <div class="section-item">
+                <div class="flex-heading">
+                    <span class="project-title">Azure Serverless Architecture (Cloud Resume Challenge)</span>
+                    <span class="date">Current</span>
+                </div>
+                <ul>
+                    <li>Architected a secure, highly available serverless web application using Azure Blob Storage, Azure CDN, and Cloudflare DNS for global edge caching and automated HTTPS encryption.</li>
+                    <li>Developed a serverless backend using Python-based Azure Functions to interact with a globally distributed Azure Cosmos DB (Table API) via RESTful API calls.</li>
+                    <li>Implemented Continuous Integration and Continuous Deployment (CI/CD) using GitHub Actions to automate code pushes from a local VS Code environment directly to Azure infrastructure.</li>
+                </ul>
+            </div>
+
+            <div class="section-item">
+                <div class="flex-heading">
+                    <span class="project-title">Enterprise CI/CD & Automation Pipeline</span>
+                    <span class="date">February 2026</span>
+                </div>
+                <ul>
+                    <li>Designed and deployed a Jenkins CI/CD pipeline to automate the testing and deployment lifecycle of web applications, reducing manual deployment times and minimizing configuration drift.</li>
+                </ul>
+            </div>
