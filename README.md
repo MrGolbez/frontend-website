@@ -1,0 +1,59 @@
+# Frontend Website
+
+This contains the static frontend for my cloud resume project, available at `https://martycrane.com`. This project is my starting off point for getting familiar with Azure cloud infrastructure and Infrastructure as Code.
+
+## Project Overview
+
+The frontend is a lightweight static site built with plain HTML, CSS, and JavaScript. It serves as the public-facing resume and portfolio site for the Azure Cloud Resume Challenge and is designed to stay simple, fast, and easy to maintain as new pages are added over time.
+
+- Render the resume and portfolio content
+- Provide the public website experience at `martycrane.com`
+- Call the backend visitor counter API on page load
+- Display the current visitor count without exposing any secrets
+
+## Files
+
+- `index.html`: Main resume page content and page structure
+- `styles.css`: Shared visual styling for the site
+- `visitor-counter.js`: Frontend logic for calling the visitor counter API
+
+## Visitor Counter Integration
+
+The frontend expects an element with the ID `visitor-count` and updates it dynamically by calling the Azure Function backend.
+
+The JavaScript supports:
+
+- Local development via `http://localhost:7071/api/GetResumeCounter`
+- Production overrides through the `data-api-url` attribute
+- A same-origin `/api/GetResumeCounter` fallback if a proxy or rewrite is configured
+
+Example markup:
+
+```html
+<span id="visitor-count" data-api-url="">Loading...</span>
+```
+
+## Local Development
+
+Serve the site locally from this folder:
+
+```powershell
+cd c:\Users\mcrane\Documents\Cloud_Resume_Challenge\frontend-website
+python -m http.server 8000
+```
+
+Then open:
+
+```text
+http://localhost:8000
+```
+
+If the backend Function is also running locally, the visitor counter should update automatically.
+
+## Planned Growth
+
+This frontend is intended to become a longer-term personal website, so the structure has been split into separate files to support:
+
+- Additional resume and portfolio pages
+- Blog pages or article pages
+- Utilize IaC with ARM and Bicep to build more infrastructure and further understanding of SecDevOps and Azure Cloud
