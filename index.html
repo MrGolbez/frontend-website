@@ -3,304 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Marty Crane Jr - Cloud Solutions Architect</title>
-    <style>
-        :root {
-            --primary-color: #2b3a42;
-            --secondary-color: #3f5765;
-            --accent-color: #0078D4; /* Azure Blue */
-            --text-color: #333333;
-            --bg-color: #f4f7f6;
-            --container-bg: #ffffff;
-        }
-
-        body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            line-height: 1.6;
-            color: var(--text-color);
-            background-color: var(--bg-color);
-            margin: 0;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: var(--container-bg);
-            padding: 50px;
-            border-radius: 8px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-        }
-
-        header {
-            text-align: center;
-            border-bottom: 3px solid var(--accent-color);
-            padding-bottom: 25px;
-            margin-bottom: 30px;
-        }
-
-        h1 {
-            margin: 0;
-            color: var(--primary-color);
-            font-size: 2.8em;
-            letter-spacing: 1px;
-        }
-
-        .contact-info {
-            font-size: 0.95em;
-            color: #555;
-            margin-top: 10px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px;
-        }
-
-        .contact-info a {
-            color: var(--accent-color);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .contact-info a:hover {
-            color: var(--primary-color);
-            text-decoration: underline;
-        }
-
-        h2 {
-            color: var(--secondary-color);
-            border-bottom: 2px solid #eaeaea;
-            padding-bottom: 8px;
-            margin-top: 35px;
-            font-size: 1.4em;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .section-item {
-            margin-bottom: 25px;
-        }
-
-        .flex-heading {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            flex-wrap: wrap;
-            margin-bottom: 5px;
-        }
-
-        .job-title, .project-title {
-            font-weight: 700;
-            color: var(--primary-color);
-            font-size: 1.15em;
-        }
-
-        .company, .date {
-            font-weight: 600;
-            color: #666;
-        }
-
-        p {
-            margin-top: 5px;
-            margin-bottom: 15px;
-        }
-
-        ul {
-            margin-top: 5px;
-            padding-left: 20px;
-        }
-
-        li {
-            margin-bottom: 8px;
-        }
-
-        .skills-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-        }
-
-        .skills-category strong {
-            color: var(--primary-color);
-        }
-
-        .counter-section {
-            text-align: center;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px dashed #ccc;
-            font-size: 0.9em;
-            color: #777;
-        }
-
-        @media (min-width: 768px) {
-            .skills-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-    </style>
+    <title>Marty Crane Jr - Cybersecurity Engineer</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <header>
+            <span class="eyebrow">Cybersecurity | Cloud | DevSecOps</span>
             <h1>Marty Crane Jr</h1>
+            <p class="headline">Cybersecurity Engineer focused on secure Azure infrastructure, automated DevSecOps pipelines, and operationally grounded cloud security execution.</p>
             <div class="contact-info">
-                <span>Long Beach, CA</span>
-                <span>925-667-6259</span>
                 <a href="mailto:Marty.crane.jr@gmail.com">Marty.crane.jr@gmail.com</a>
-                <a href="https://linkedin.com/in/martycrane/" target="_blank">LinkedIn</a>
-                <a href="https://github.com/MrGolbez" target="_blank">GitHub</a>
+                <span>925-667-6259</span>
+                <span>Long Beach, CA</span>
+                <a href="https://linkedin.com/in/martycrane/" target="_blank" rel="noreferrer">linkedin.com/in/martycrane/</a>
+                <a href="https://github.com/MrGolbez" target="_blank" rel="noreferrer">github.com/MrGolbez</a>
             </div>
         </header>
 
-        <section>
-            <h2>Professional Summary</h2>
-            <p>High-impact Cloud Solutions Architect and Site Reliability Engineering (SRE) professional with an MS in Cybersecurity and strong foundational expertise in Microsoft Azure. Proven ability to design secure, highly available infrastructure, automate CI/CD deployments, and bridge the gap between technical operations and client business requirements. Adept at implementing secure cloud architectures, managing multi-tier applications, and leveraging Infrastructure as Code (IaC) to drive enterprise scalability and compliance.</p>
-        </section>
+        <main>
+            <section>
+                <h2>Professional Summary</h2>
+                <p class="summary">Cybersecurity Engineer and Associate of ISC2 CISSP with an MS in Cybersecurity, specializing in bridging the gap between threat detection and secure cloud infrastructure. Highly proficient in engineering automated DevSecOps pipelines, securing Azure environments, and implementing shift-left vulnerability management. Leverages extensive operational IT experience to translate complex security requirements into actionable, automated CI/CD workflows and proactive risk mitigation strategies.</p>
+            </section>
 
-        <section>
-            <h2>Education</h2>
-            <div class="section-item">
-                <div class="flex-heading">
-                    <span class="job-title">California State University Dominguez Hills</span>
-                    <span class="date">December 2025</span>
+            <section>
+                <h2>Skills &amp; Certifications</h2>
+                <div class="skills-grid">
+                    <div class="skill-card">
+                        <strong>Cloud &amp; Infrastructure</strong>
+                        <p>Microsoft Azure (VNETs, Hub-and-Spoke, Serverless, Cosmos DB), Docker, Linux, Windows Server</p>
+                    </div>
+                    <div class="skill-card">
+                        <strong>DevSecOps &amp; Automation</strong>
+                        <p>Jenkins, SonarQube, CI/CD Pipeline Automation, Python, Bash/Shell Scripting, PowerShell</p>
+                    </div>
+                    <div class="skill-card">
+                        <strong>Security &amp; Network Architecture</strong>
+                        <p>Zero Trust Architecture, Vulnerability Management (SAST), SIEM Log Analysis, Firewall and IPS, TCP/IP Networking, Active Directory (AD DS)</p>
+                    </div>
+                    <div class="skill-card">
+                        <strong>Certifications</strong>
+                        <p>Associate of ISC2 CISSP, CompTIA CySA+, Security+, Network+, A+, AZ-104 (projected June)</p>
+                    </div>
                 </div>
-                <p>Master of Science in Cybersecurity & BA Computer Technology (Honors)</p>
-            </div>
-        </section>
+            </section>
 
-        <section>
-            <h2>Certifications</h2>
-            <ul>
-                <li><strong>Certifications:</strong> (ISC)² CISSP – Associate | CompTIA CySA+ | Security+ | Network+ | A+</li>
-                <li><strong>In Progress:</strong> Microsoft Certified: Azure Administrator Associate (AZ-104)</li>
-            </ul>
-        </section>
+            <section>
+                <h2>Professional Experience</h2>
 
-        <section>
-            <h2>Technical Skills</h2>
-            <div class="skills-grid">
-                <div class="skills-category">
-                    <p><strong>Cloud Architecture & SRE:</strong> Microsoft Azure (VNETs, NSGs, App Services, Functions), Serverless Computing, High Availability Design, Edge Routing (CDN, Cloudflare, DNS)</p>
+                <div class="section-item">
+                    <div class="flex-heading">
+                        <span class="job-title">Associate Technical Account Manager</span>
+                        <span class="date">March 2025 - Present</span>
+                    </div>
+                    <div class="company">Yardi Systems</div>
+                    <ul>
+                        <li>Architected and deployed Virtuoso AI Agents for enterprise clients, using Virtuoso Composer to automate manual workflows and modernize client operations through the Virtuoso Marketplace.</li>
+                        <li>Resolved complex backend data anomalies by authoring custom SQL tokens for client leasing documents, ensuring high data integrity and reliability for high-stakes client portfolios.</li>
+                        <li>Orchestrated the end-to-end implementation of 2-3 simultaneous enterprise projects while maintaining a high-volume technical workload, acting as a primary technical advisor to overcome deployment blockers.</li>
+                    </ul>
                 </div>
-                <div class="skills-category">
-                    <p><strong>DevOps & Automation:</strong> CI/CD Pipelines (Jenkins, GitHub Actions), Infrastructure as Code (Bicep/Terraform), Configuration Management (Ansible), Docker, Kubernetes</p>
-                </div>
-                <div class="skills-category">
-                    <p><strong>Systems & Databases:</strong> Windows Server 2022, IIS, Linux (Ubuntu/CentOS), MS SQL Server, Cosmos DB</p>
-                </div>
-                <div class="skills-category">
-                    <p><strong>Security & Identity:</strong> Entra ID (Azure AD), Identity & Access Management (IAM), Zero Trust Architecture, Role-Based Access Control (RBAC)</p>
-                </div>
-            </div>
-        </section>
 
-        <section>
-            <h2>Professional Experience</h2>
-            
-            <div class="section-item">
-                <div class="flex-heading">
-                    <span class="job-title">Associate Technical Account Manager</span>
-                    <span class="date">March 2025 – Present</span>
+                <div class="section-item">
+                    <div class="flex-heading">
+                        <span class="job-title">Service Desk Analyst L1 (Network &amp; Systems Support)</span>
+                        <span class="date">September 2024 - March 2025</span>
+                    </div>
+                    <div class="company">Taco Bell</div>
+                    <ul>
+                        <li>Achieved under 10-minute average restoration time for critical outages by troubleshooting Cisco routers, switches, and VPNs.</li>
+                        <li>Provisioned enterprise restaurant equipment and resolved connectivity blockers by troubleshooting Docker container deployments and remote OS updates.</li>
+                        <li>Managed the lifecycle of 140+ weekly incidents using ServiceNow and ITIL frameworks to ensure 24/7 business continuity.</li>
+                    </ul>
                 </div>
-                <div class="company">Yardi Systems</div>
-                <ul>
-                    <li>Orchestrate the end-to-end implementation and architecture design for 3-5 simultaneous enterprise clients utilizing the StorageCafe product suite within strict compliance environments.</li>
-                    <li>Drive the technical deployment of AI agents (Virtuoso AI) into client workflows, bridging the gap between backend cloud infrastructure and front-end business requirements.</li>
-                    <li>Troubleshoot complex database anomalies using custom SQL, ensuring data integrity and high availability across multi-tier, globally distributed client environments.</li>
-                    <li>Enforce strict IAM baselines by configuring YardiOne Single Sign-On (SSO) authentication, establishing secure, role-based access controls for enterprise user groups.</li>
-                </ul>
-            </div>
 
-            <div class="section-item">
-                <div class="flex-heading">
-                    <span class="job-title">Service Desk Analyst L1 (Network & Systems Support)</span>
-                    <span class="date">September 2024 – March 2025</span>
+                <div class="section-item">
+                    <div class="flex-heading">
+                        <span class="job-title">IT Support Specialist</span>
+                        <span class="date">August 2023 - August 2024</span>
+                    </div>
+                    <div class="company">CSUDH Information Technology</div>
+                    <ul>
+                        <li>Secured digital access for over 15,000 faculty and students by streamlining deployment of MFA protocols.</li>
+                        <li>Reduced the technical backlog by 75% through effective triage and technical communication with a diverse user base.</li>
+                    </ul>
                 </div>
-                <div class="company">Taco Bell</div>
-                <ul>
-                    <li>Managed the lifecycle of 140+ weekly incidents using ServiceNow and ITIL frameworks to ensure 24/7 business continuity for critical retail operations.</li>
-                    <li>Achieved a <10-minute average restoration time for network outages by troubleshooting Cisco routers, switches, and VPNs, maintaining strict access controls and secure communications.</li>
-                </ul>
-            </div>
 
-            <div class="section-item">
-                <div class="flex-heading">
-                    <span class="job-title">IT Support Specialist</span>
-                    <span class="date">August 2023 – August 2024</span>
+                <div class="section-item">
+                    <div class="flex-heading">
+                        <span class="job-title">Termite &amp; Pest Inspector</span>
+                        <span class="date">February 2019 - January 2024</span>
+                    </div>
+                    <div class="company">Premium Termite and Pest Control</div>
+                    <ul>
+                        <li>Directed the end-to-end lifecycle of remediation projects, translating investigative findings into mitigation plans and securing buy-in from non-technical stakeholders.</li>
+                    </ul>
                 </div>
-                <div class="company">CSUDH Information Technology</div>
-                <ul>
-                    <li>Administered security policies via Duo Mobile and Entra ID, enforcing strict identity management and access control measures across a sprawling university network.</li>
-                    <li>Secured digital access for over 15,000+ faculty and students by streamlining the deployment of MFA protocols, ensuring 100% compliance with campus-wide security mandates.</li>
-                </ul>
-            </div>
-        </section>
+            </section>
 
-        <section>
-            <h2>Technical Projects</h2>
-            
-            <div class="section-item">
-                <div class="flex-heading">
-                    <span class="project-title">Azure Serverless Architecture (Cloud Resume Challenge)</span>
-                    <span class="date">Current</span>
-                </div>
-                <ul>
-                    <li>Architected a secure, highly available serverless web application using Azure Blob Storage, Azure CDN, and Cloudflare DNS for global edge caching and automated HTTPS encryption.</li>
-                    <li>Developed a serverless backend using Python-based Azure Functions to interact with a globally distributed Azure Cosmos DB (Table API) via RESTful API calls.</li>
-                    <li>Implemented Continuous Integration and Continuous Deployment (CI/CD) using GitHub Actions to automate code pushes from a local VS Code environment directly to Azure infrastructure.</li>
-                </ul>
-            </div>
+            <section>
+                <h2>Technical Projects</h2>
 
-            <div class="section-item">
-                <div class="flex-heading">
-                    <span class="project-title">Enterprise CI/CD & Automation Pipeline</span>
-                    <span class="date">February 2026</span>
+                <div class="section-item">
+                    <div class="flex-heading">
+                        <span class="project-title">Enterprise Azure Infrastructure &amp; Governance (Master's Capstone)</span>
+                        <span class="date">December 2025 - Present</span>
+                    </div>
+                    <ul>
+                        <li>Designed a cloud-native network with hub-and-spoke topology and VNET peering to validate secure, scalable cloud migrations.</li>
+                        <li>Automated provisioning of high-availability virtual machines and storage accounts using Bicep and ARM templates.</li>
+                        <li>Secured cloud assets by implementing network security groups, user-defined routes, and Azure Policy to enforce strict compliance guardrails.</li>
+                    </ul>
                 </div>
-                <ul>
-                    <li>Designed and deployed a Jenkins CI/CD pipeline to automate the testing and deployment lifecycle of web applications, reducing manual deployment times and minimizing configuration drift.</li>
-                </ul>
-            </div>
-        </section>
+
+                <div class="section-item">
+                    <div class="flex-heading">
+                        <span class="project-title">Jenkins CI/CD &amp; Automation Pipeline</span>
+                        <span class="date">Fall 2025</span>
+                    </div>
+                    <ul>
+                        <li>Engineered a containerized DevSecOps CI/CD pipeline using Jenkins and Docker, automating code compilation, testing, static analysis, and artifact generation.</li>
+                        <li>Architected isolated Docker network topologies to enable secure inter-container communication between Jenkins and SonarQube, resolving environmental isolation blockers.</li>
+                        <li>Streamlined operational visibility by integrating real-time Slack webhooks for pipeline status alerts and securing sensitive pipeline secrets through Jenkins credential management.</li>
+                    </ul>
+                </div>
+
+                <div class="section-item">
+                    <div class="flex-heading">
+                        <span class="project-title">Azure Cloud Resume Challenge</span>
+                        <span class="date">Current</span>
+                    </div>
+                    <ul>
+                        <li>Built a cloud-hosted resume site on Azure Storage with CDN delivery and a custom domain to present a live portfolio through a production-style deployment path.</li>
+                        <li>Implemented a Python Azure Function visitor counter backed by Cosmos DB Table API, connecting frontend JavaScript to a serverless backend for live page analytics.</li>
+                        <li>Structured the project to support the next phase of automation work, including pytest coverage, CI/CD with GitHub Actions, and infrastructure-as-code deployment templates.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section>
+                <h2>Education</h2>
+                <div class="education-list">
+                    <div class="education-item">
+                        <div class="school-name">California State University Dominguez Hills</div>
+                        <p>Master of Science in Cybersecurity</p>
+                    </div>
+                    <div class="education-item">
+                        <div class="school-name">California State University Dominguez Hills</div>
+                        <p>Bachelor's in Computer Technology (Honors)</p>
+                    </div>
+                </div>
+            </section>
+        </main>
 
         <footer class="counter-section">
             <p>This page has been viewed <span id="visitor-count" data-api-url="">Loading...</span> times.</p>
         </footer>
     </div>
 
-    <script>
-        async function loadVisitorCount() {
-            const counterElement = document.getElementById("visitor-count");
-
-            if (!counterElement) {
-                return;
-            }
-
-            const configuredApiUrl = counterElement.dataset.apiUrl;
-            const isLocalHost = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1" || window.location.hostname === "";
-            const apiUrl = configuredApiUrl || (isLocalHost
-                ? "http://localhost:7071/api/GetResumeCounter"
-                : "/api/GetResumeCounter");
-
-            try {
-                const response = await fetch(apiUrl, {
-                    method: "GET",
-                    headers: { "Accept": "application/json" }
-                });
-
-                if (!response.ok) {
-                    throw new Error("Counter request failed.");
-                }
-
-                const data = await response.json();
-                counterElement.textContent = typeof data.count === "number" ? String(data.count) : "Unavailable";
-            } catch (error) {
-                console.error("Unable to load visitor count.", error);
-                counterElement.textContent = "Unavailable";
-            }
-        }
-
-        loadVisitorCount();
-    </script>
+    <script src="visitor-counter.js"></script>
 </body>
 </html>
