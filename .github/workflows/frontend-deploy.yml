@@ -1,0 +1,59 @@
+name: Frontend Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AZURE_RESOURCE_GROUP: rg-cloudresume-prod
+  AZURE_STORAGE_ACCOUNT: martycraneresume26
+
+jobs:
+  deploy:
+    name: Deploy static website
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Upload static site files
+        uses: azure/cli@v2
+        with:
+          inlineScript: |
+            az storage blob upload-batch \
+              --account-name "$AZURE_STORAGE_ACCOUNT" \
+              --destination '$web' \
+              --source . \
+              --overwrite true \
+              --auth-mode login \
+              --pattern "*.html"
+
+            az storage blob upload-batch \
+              --account-name "$AZURE_STORAGE_ACCOUNT" \
+              --destination '$web' \
+              --source . \
+              --overwrite true \
+              --auth-mode login \
+              --pattern "*.css"
+
+            az storage blob upload-batch \
+              --account-name "$AZURE_STORAGE_ACCOUNT" \
+              --destination '$web' \
+              --source . \
+              --overwrite true \
+              --auth-mode login \
+              --pattern "*.js"
