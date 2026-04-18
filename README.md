@@ -52,29 +52,44 @@ If the backend Function is also running locally, the visitor counter should upda
 
 ## Frontend Deployment
 
-The static site is deployed by `.github/workflows/frontend-deploy.yml` on pushes to `master` or `main`.
+The static site is deployed by `.github/workflows/frontend-deploy.yml` on pushes to `master` or `main`, and can also be run manually from GitHub Actions.
 
 Required GitHub Actions secrets:
 
 - `AZURE_CLIENT_ID`
 - `AZURE_TENANT_ID`
 - `AZURE_SUBSCRIPTION_ID`
+- `CLOUDFLARE_API_TOKEN`
 
 The workflow uses Azure OpenID Connect through `azure/login`, so no publish profile, storage key, or connection string is stored in GitHub.
-
-Optional GitHub Actions secret for Cloudflare cache purge:
-
-- `CLOUDFLARE_API_TOKEN`
 
 Required Azure permissions for the federated identity:
 
 - `Storage Blob Data Contributor` on the resume storage account
 
-Optional GitHub Actions variable for Cloudflare cache purge:
+Required GitHub Actions variable for Cloudflare cache purge:
 
 - `CLOUDFLARE_ZONE_ID`
 
-If `CLOUDFLARE_ZONE_ID` is set, the workflow purges the cached homepage, `index.html`, `styles.css`, and `visitor-counter.js` after uploading the static files. The Cloudflare API token should be scoped only to the `martycrane.com` zone with cache purge permission.
+The Cloudflare API token is scoped to the `martycrane.com` zone with cache purge permission. After uploading the static files to Azure Storage, the workflow purges the cached homepage, `index.html`, `styles.css`, and `visitor-counter.js`.
+
+Manual workflow run:
+
+```powershell
+gh workflow run "Frontend Deploy" --ref master
+```
+
+Inspect recent runs:
+
+```powershell
+gh run list --workflow "Frontend Deploy"
+```
+
+Expected successful steps:
+
+- Azure login
+- Upload static site files
+- Purge Cloudflare cache
 
 ## Planned Growth
 
