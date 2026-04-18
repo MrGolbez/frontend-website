@@ -50,6 +50,30 @@ http://localhost:8000
 
 If the backend Function is also running locally, the visitor counter should update automatically.
 
+## Frontend Deployment
+
+The static site is deployed by `.github/workflows/frontend-deploy.yml` on pushes to `master` or `main`.
+
+Required GitHub Actions secrets:
+
+- `AZURE_CLIENT_ID`
+- `AZURE_TENANT_ID`
+- `AZURE_SUBSCRIPTION_ID`
+
+The workflow uses Azure OpenID Connect through `azure/login`, so no publish profile, storage key, or connection string is stored in GitHub.
+
+Required Azure permissions for the federated identity:
+
+- `Storage Blob Data Contributor` on the resume storage account
+- CDN purge permission on the resource group or CDN profile if cache purge is enabled
+
+Optional GitHub Actions variables for CDN purge:
+
+- `AZURE_CDN_PROFILE_NAME`
+- `AZURE_CDN_ENDPOINT_NAME`
+
+If both CDN variables are set, the workflow purges `/*` after uploading the static files. If either variable is missing, the purge step is skipped.
+
 ## Planned Growth
 
 This frontend is intended to become a longer-term personal website, so the structure has been split into separate files to support:

@@ -3,16 +3,28 @@ name: Frontend Deploy
 on:
   push:
     branches:
+      - master
       - main
+    paths:
+      - "index.html"
+      - "styles.css"
+      - "visitor-counter.js"
+      - ".github/workflows/frontend-deploy.yml"
   workflow_dispatch:
 
 permissions:
   id-token: write
   contents: read
 
+concurrency:
+  group: frontend-deploy-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   AZURE_RESOURCE_GROUP: rg-cloudresume-prod
   AZURE_STORAGE_ACCOUNT: martycraneresume26
+  AZURE_CDN_PROFILE_NAME: ${{ vars.AZURE_CDN_PROFILE_NAME }}
+  AZURE_CDN_ENDPOINT_NAME: ${{ vars.AZURE_CDN_ENDPOINT_NAME }}
 
 jobs:
   deploy:
@@ -22,6 +34,12 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+
+      - name: Validate static site files
+        run: |
+          test -f index.html
+          test -f styles.css
+          test -f visitor-counter.js
 
       - name: Azure login
         uses: azure/login@v2
@@ -34,13 +52,7 @@ jobs:
         uses: azure/cli@v2
         with:
           inlineScript: |
-            az storage blob upload-batch \
-              --account-name "$AZURE_STORAGE_ACCOUNT" \
-              --destination '$web' \
-              --source . \
-              --overwrite true \
-              --auth-mode login \
-              --pattern "*.html"
+            set -euo pipefail
 
             az storage blob upload-batch \
               --account-name "$AZURE_STORAGE_ACCOUNT" \
@@ -48,12 +60,29 @@ jobs:
               --source . \
               --overwrite true \
               --auth-mode login \
-              --pattern "*.css"
+              --pattern "*.html" \
+              --content-cache-control "no-cache"
 
-            az storage blob upload-batch \
-              --account-name "$AZURE_STORAGE_ACCOUNT" \
-              --destination '$web' \
-              --source . \
-              --overwrite true \
-              --auth-mode login \
-              --pattern "*.js"
+            for pattern in "*.css" "*.js"; do
+              az storage blob upload-batch \
+                --account-name "$AZURE_STORAGE_ACCOUNT" \
+                --destination '$web' \
+                --source . \
+                --overwrite true \
+                --auth-mode login \
+                --pattern "$pattern" \
+                --content-cache-control "public, max-age=300"
+            done
+
+      - name: Purge Azure CDN cache
+        if: ${{ env.AZURE_CDN_PROFILE_NAME != '' && env.AZURE_CDN_ENDPOINT_NAME != '' }}
+        uses: azure/cli@v2
+        with:
+          inlineScript: |
+            set -euo pipefail
+
+            az cdn endpoint purge \
+              --resource-group "$AZURE_RESOURCE_GROUP" \
+              --profile-name "$AZURE_CDN_PROFILE_NAME" \
+              --name "$AZURE_CDN_ENDPOINT_NAME" \
+              --content-paths "/*"
