@@ -21,10 +21,9 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  AZURE_RESOURCE_GROUP: rg-cloudresume-prod
   AZURE_STORAGE_ACCOUNT: martycraneresume26
-  AZURE_CDN_PROFILE_NAME: ${{ vars.AZURE_CDN_PROFILE_NAME }}
-  AZURE_CDN_ENDPOINT_NAME: ${{ vars.AZURE_CDN_ENDPOINT_NAME }}
+  CLOUDFLARE_ZONE_ID: ${{ vars.CLOUDFLARE_ZONE_ID }}
+  SITE_URL: https://martycrane.com
 
 jobs:
   deploy:
@@ -74,15 +73,29 @@ jobs:
                 --content-cache-control "public, max-age=300"
             done
 
-      - name: Purge Azure CDN cache
-        if: ${{ env.AZURE_CDN_PROFILE_NAME != '' && env.AZURE_CDN_ENDPOINT_NAME != '' }}
-        uses: azure/cli@v2
-        with:
-          inlineScript: |
-            set -euo pipefail
+      - name: Purge Cloudflare cache
+        if: ${{ vars.CLOUDFLARE_ZONE_ID != '' }}
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          set -euo pipefail
 
-            az cdn endpoint purge \
-              --resource-group "$AZURE_RESOURCE_GROUP" \
-              --profile-name "$AZURE_CDN_PROFILE_NAME" \
-              --name "$AZURE_CDN_ENDPOINT_NAME" \
-              --content-paths "/*"
+          if [ -z "${CLOUDFLARE_API_TOKEN:-}" ]; then
+            echo "CLOUDFLARE_API_TOKEN secret is required when CLOUDFLARE_ZONE_ID is set."
+            exit 1
+          fi
+
+          payload="$(jq -n --arg site "$SITE_URL" '{files: [
+            $site + "/",
+            $site + "/index.html",
+            $site + "/styles.css",
+            $site + "/visitor-counter.js"
+          ]}')"
+
+          response="$(curl --fail --silent --show-error --request POST \
+            "https://api.cloudflare.com/client/v4/zones/$CLOUDFLARE_ZONE_ID/purge_cache" \
+            --header "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+            --header "Content-Type: application/json" \
+            --data "$payload")"
+
+          echo "$response" | jq -e '.success == true' > /dev/null

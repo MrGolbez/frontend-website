@@ -62,17 +62,19 @@ Required GitHub Actions secrets:
 
 The workflow uses Azure OpenID Connect through `azure/login`, so no publish profile, storage key, or connection string is stored in GitHub.
 
+Optional GitHub Actions secret for Cloudflare cache purge:
+
+- `CLOUDFLARE_API_TOKEN`
+
 Required Azure permissions for the federated identity:
 
 - `Storage Blob Data Contributor` on the resume storage account
-- CDN purge permission on the resource group or CDN profile if cache purge is enabled
 
-Optional GitHub Actions variables for CDN purge:
+Optional GitHub Actions variable for Cloudflare cache purge:
 
-- `AZURE_CDN_PROFILE_NAME`
-- `AZURE_CDN_ENDPOINT_NAME`
+- `CLOUDFLARE_ZONE_ID`
 
-If both CDN variables are set, the workflow purges `/*` after uploading the static files. If either variable is missing, the purge step is skipped.
+If `CLOUDFLARE_ZONE_ID` is set, the workflow purges the cached homepage, `index.html`, `styles.css`, and `visitor-counter.js` after uploading the static files. The Cloudflare API token should be scoped only to the `martycrane.com` zone with cache purge permission.
 
 ## Planned Growth
 
