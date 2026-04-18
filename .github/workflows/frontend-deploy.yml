@@ -74,11 +74,15 @@ jobs:
             done
 
       - name: Purge Cloudflare cache
-        if: ${{ vars.CLOUDFLARE_ZONE_ID != '' }}
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: |
           set -euo pipefail
+
+          if [ -z "${CLOUDFLARE_ZONE_ID:-}" ]; then
+            echo "CLOUDFLARE_ZONE_ID variable is not set. Skipping Cloudflare cache purge."
+            exit 0
+          fi
 
           if [ -z "${CLOUDFLARE_API_TOKEN:-}" ]; then
             echo "CLOUDFLARE_API_TOKEN secret is required when CLOUDFLARE_ZONE_ID is set."
