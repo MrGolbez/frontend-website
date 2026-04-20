@@ -116,7 +116,11 @@ Expected successful steps:
 
 ## Infrastructure As Code
 
-The Azure infrastructure is modeled separately in the project-level `infra/` folder using Bicep.
+The Azure infrastructure is modeled separately in the public IaC repo:
+
+```text
+https://github.com/MrGolbez/cloud-resume-infra
+```
 
 The Bicep modules currently cover:
 
