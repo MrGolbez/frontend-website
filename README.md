@@ -1,48 +1,63 @@
-# Frontend Website
+# Cloud Resume Frontend
 
-This contains the static frontend for my cloud resume project, available at `https://martycrane.com`. This project is my starting off point for getting familiar with Azure cloud infrastructure and Infrastructure as Code.
+Static frontend for my Azure Cloud Resume Challenge portfolio site: `https://martycrane.com`.
 
-## Project Overview
+This repo contains the public resume page, project blog page, visitor counter JavaScript, styling, and the GitHub Actions workflow that deploys the site to Azure Storage.
 
-The frontend is a lightweight static site built with plain HTML, CSS, and JavaScript. It serves as the public-facing resume and portfolio site for the Azure Cloud Resume Challenge and is designed to stay simple, fast, and easy to maintain as new pages are added over time.
+## What This Demonstrates
 
-- Render the resume and portfolio content
-- Provide the public website experience at `martycrane.com`
-- Call the backend visitor counter API on page load
-- Display the current visitor count without exposing any secrets
+- Static website hosting on Azure Storage
+- Custom domain delivery through Cloudflare DNS/CDN
+- Vanilla HTML, CSS, and JavaScript
+- Browser-to-API integration with an Azure Function
+- Secure GitHub Actions deployment using Azure OIDC
+- Cloudflare cache purge after deployment
+- No secrets committed to source control
 
-## Files
+## Site Pages
 
-- `index.html`: Main resume page content and page structure
-- `styles.css`: Shared visual styling for the site
+- `index.html`: Resume and portfolio landing page
+- `blog.html`: Long-form Cloud Resume Challenge write-up
+- `styles.css`: Shared styling for the resume and blog pages
 - `visitor-counter.js`: Frontend logic for calling the visitor counter API
 
-## Visitor Counter Integration
+## Visitor Counter Flow
 
-The frontend expects an element with the ID `visitor-count` and updates it dynamically by calling the Azure Function backend.
+The resume page includes a visitor counter that calls the backend API on page load.
+
+Flow:
+
+```text
+Browser JavaScript
+  -> Azure Function HTTP endpoint
+  -> Cosmos DB Table API
+  -> JSON response
+  -> DOM update
+```
+
+The frontend expects an element with the ID `visitor-count`:
+
+```html
+<span id="visitor-count" data-api-url="">Loading...</span>
+```
 
 The JavaScript supports:
 
 - Local development via `http://localhost:7071/api/GetResumeCounter`
 - Production overrides through the `data-api-url` attribute
 - A same-origin `/api/GetResumeCounter` fallback if a proxy or rewrite is configured
-
-Example markup:
-
-```html
-<span id="visitor-count" data-api-url="">Loading...</span>
-```
+- Safe failure handling that displays `Unavailable` if the API cannot be reached
 
 ## Local Development
 
 Serve the site locally from this folder:
 
 ```powershell
-cd c:\Users\mcrane\Documents\Cloud_Resume_Challenge\frontend-website
+cd C:\Users\mcrane\Documents\Cloud_Resume_Challenge\frontend-website
 python -m http.server 8000
 ```
 
-Then open:
+Open:
 
 ```text
 http://localhost:8000
@@ -50,9 +65,19 @@ http://localhost:8000
 
 If the backend Function is also running locally, the visitor counter should update automatically.
 
-## Frontend Deployment
+## Deployment
 
-The static site is deployed by `.github/workflows/frontend-deploy.yml` on pushes to `master` or `main`, and can also be run manually from GitHub Actions.
+The site deploys through `.github/workflows/frontend-deploy.yml`.
+
+The workflow runs on pushes to `master` or `main` when frontend files change, and it can also be run manually.
+
+Deployment steps:
+
+1. Check out the repo
+2. Validate required static files
+3. Log in to Azure with OIDC
+4. Upload HTML, CSS, and JavaScript files to the Azure Storage `$web` container
+5. Purge Cloudflare cache for the homepage, blog page, and static assets
 
 Required GitHub Actions secrets:
 
@@ -61,17 +86,15 @@ Required GitHub Actions secrets:
 - `AZURE_SUBSCRIPTION_ID`
 - `CLOUDFLARE_API_TOKEN`
 
-The workflow uses Azure OpenID Connect through `azure/login`, so no publish profile, storage key, or connection string is stored in GitHub.
-
-Required Azure permissions for the federated identity:
-
-- `Storage Blob Data Contributor` on the resume storage account
-
-Required GitHub Actions variable for Cloudflare cache purge:
+Required GitHub Actions variable:
 
 - `CLOUDFLARE_ZONE_ID`
 
-The Cloudflare API token is scoped to the `martycrane.com` zone with cache purge permission. After uploading the static files to Azure Storage, the workflow purges the cached homepage, `index.html`, `styles.css`, and `visitor-counter.js`.
+Required Azure permission for the federated identity:
+
+- `Storage Blob Data Contributor` on the static website storage account
+
+The workflow uses Azure OpenID Connect through `azure/login`, so no Azure client secret, storage key, publish profile, or connection string is stored in GitHub.
 
 Manual workflow run:
 
@@ -91,10 +114,30 @@ Expected successful steps:
 - Upload static site files
 - Purge Cloudflare cache
 
-## Planned Growth
+## Infrastructure As Code
 
-This frontend is intended to become a longer-term personal website, so the structure has been split into separate files to support:
+The Azure infrastructure is modeled separately in the project-level `infra/` folder using Bicep.
 
-- Additional resume and portfolio pages
-- Blog pages or article pages
-- Utilize IaC with ARM and Bicep to build more infrastructure and further understanding of SecDevOps and Azure Cloud
+The Bicep modules currently cover:
+
+- Azure Storage static website
+- Azure Functions Flex Consumption plan
+- Linux Python Function App
+- Function runtime/deployment storage
+- Cosmos DB Table API account
+- `Counter` table used by the visitor counter
+
+Cloudflare DNS/CDN settings are documented separately because they are not Azure Resource Manager resources. The cache purge integration lives in this frontend deployment workflow.
+
+## Completed Project Status
+
+The core Azure Cloud Resume Challenge implementation is complete:
+
+- Static site live on a custom domain
+- Visitor counter integrated with serverless backend
+- Backend tests and deployment pipeline completed
+- Frontend deployment pipeline completed
+- Cloudflare cache purge automated
+- Initial Bicep IaC modules created
+
+Planned improvements include architecture diagrams, screenshots, deeper Cloudflare documentation, and an IaC validation workflow that runs Bicep build and Azure `what-if`.

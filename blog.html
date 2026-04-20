@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building My Azure Cloud Resume Challenge - Marty Crane Jr</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav class="site-nav" aria-label="Primary navigation">
+                <a href="index.html">Resume</a>
+                <a href="blog.html" aria-current="page">Blog</a>
+            </nav>
+            <span class="eyebrow">Project Write-Up</span>
+            <h1>Building My Azure Cloud Resume Infrastructure</h1>
+            <p class="headline">How I built a serverless resume site with Azure Storage, Azure Functions, Cosmos DB, GitHub Actions, Cloudflare, and Bicep.</p>
+        </header>
+
+        <main class="article-layout">
+            <article class="blog-article">
+                <p class="article-meta">Published as part of my Azure Cloud Resume Challenge portfolio project.</p>
+
+                <section>
+                    <h2>Why I Built This</h2>
+                    <p>I built this project to turn cloud concepts into a working production-style portfolio. I wanted something more useful than a lab that only runs on my machine. The goal was to have a real custom domain, a live frontend, a serverless backend, a database-backed visitor counter, automated deployments, and infrastructure documented as code.</p>
+                    <p>The Azure Cloud Resume Challenge was a good fit because it connects a lot of practical cloud engineering skills in one project: static hosting, API design, serverless compute, database integration, CI/CD, identity, secrets management, DNS, caching, and infrastructure as code.</p>
+                </section>
+
+                <section>
+                    <h2>Architecture Overview</h2>
+                    <p>The current request flow is straightforward:</p>
+                    <ul>
+                        <li>A visitor opens <strong>martycrane.com</strong>.</li>
+                        <li>Cloudflare handles DNS, HTTPS, and edge caching.</li>
+                        <li>The static site is served from Azure Storage static website hosting.</li>
+                        <li>JavaScript runs in the browser and calls an Azure Function.</li>
+                        <li>The Azure Function reads and updates a Cosmos DB Table API row.</li>
+                        <li>The updated visitor count is returned as JSON and displayed on the page.</li>
+                    </ul>
+                    <p>That gives me a small but complete serverless architecture with a real frontend, backend, database, and deployment pipeline.</p>
+                </section>
+
+                <section>
+                    <h2>Frontend: Azure Storage And Cloudflare</h2>
+                    <p>The frontend is intentionally simple: plain HTML, CSS, and vanilla JavaScript. I wanted the site to stay fast, easy to inspect, and easy to deploy without introducing a framework before I actually needed one.</p>
+                    <p>Azure Storage hosts the static files, while Cloudflare sits in front of the custom domain. Cloudflare gives me DNS management, HTTPS, and caching without needing Azure Front Door for this phase of the project.</p>
+                    <p>One practical lesson here was separating the origin from the edge. Azure Storage is the source of the site files, but Cloudflare can still serve cached versions. That meant deployment was only half the problem; cache invalidation also had to be handled.</p>
+                </section>
+
+                <section>
+                    <h2>Backend: Azure Functions And Cosmos DB</h2>
+                    <p>The backend is a Python Azure Function with one HTTP-triggered endpoint: <code>/api/GetResumeCounter</code>. When the frontend calls it, the function reads the current counter value, increments it, stores the updated value, and returns the new count as JSON.</p>
+                    <p>For storage, I used Cosmos DB Table API with the <code>azure-data-tables</code> Python package. The counter is stored as a simple table entity with a partition key, row key, and count value. This keeps the backend small while still using a real cloud database service.</p>
+                    <p>The function reads configuration from environment variables instead of hardcoding secrets or connection strings. In Azure, those values live in Function App settings. Locally, they can be supplied through <code>local.settings.json</code>, which stays out of source control.</p>
+                </section>
+
+                <section>
+                    <h2>Visitor Counter Flow</h2>
+                    <p>The visitor counter looks simple on the page, but it ties the whole stack together. The browser makes an async fetch request, the Azure Function handles the request, Cosmos DB stores the count, and the DOM updates safely after the JSON response comes back.</p>
+                    <p>I also added error handling on the frontend. If the API is unavailable or returns an unexpected response, the page shows <code>Unavailable</code> instead of breaking the user experience or leaving a confusing loading message forever.</p>
+                    <p>For this portfolio use case, the counter uses a simple read-increment-upsert flow. It is not fully atomic under high concurrency, but that tradeoff is acceptable for a resume site. I documented that risk so it is clear where the design could be hardened later.</p>
+                </section>
+
+                <section>
+                    <h2>CI/CD With GitHub Actions</h2>
+                    <p>I built separate GitHub Actions workflows for the backend and frontend. The backend pipeline runs tests and deploys the Azure Function. The frontend pipeline uploads static files to Azure Storage and then purges Cloudflare cache.</p>
+                    <p>The frontend workflow uses Azure login with OpenID Connect, so I do not store an Azure client secret, storage key, or publish profile in GitHub. GitHub gets a short-lived token, Azure validates the federated identity, and the workflow receives only the access it needs.</p>
+                    <p>After the Azure upload completes, the workflow calls Cloudflare's API to purge the homepage and static assets. That step makes the deployment feel immediate from the public domain instead of waiting for cached files to expire.</p>
+                </section>
+
+                <section>
+                    <h2>Secure Deployments With Azure OIDC</h2>
+                    <p>One of the most useful issues I hit was with Azure OIDC. The workflow failed at Azure login with this message:</p>
+                    <pre><code>AADSTS700213: No matching federated identity record found
+subject: repo:MrGolbez/frontend-website:ref:refs/heads/master</code></pre>
+                    <p>The fix was to stop guessing and read the exact subject claim in the GitHub Actions log. Azure expected the federated credential to match the repository and branch exactly. I added a federated credential in Microsoft Entra ID for:</p>
+                    <pre><code>repo:MrGolbez/frontend-website:ref:refs/heads/master</code></pre>
+                    <p>After that, Azure login succeeded. This was a good reminder that OIDC is very secure, but it is also exact. Repository name, branch name, issuer, and audience all have to line up.</p>
+                </section>
+
+                <section>
+                    <h2>Cloudflare Cache Purge Troubleshooting</h2>
+                    <p>I originally thought the cache purge step would be Azure CDN or Azure Front Door, but my domain was actually using Cloudflare. That changed the deployment design. Instead of calling an Azure CDN purge command, the workflow needed to call Cloudflare's cache purge API.</p>
+                    <p>After adding the Cloudflare token and zone ID, I noticed the purge step was not obvious in the GitHub Actions run. The workflow had a GitHub-level <code>if</code> condition, so if the variable was missing or not available, the step could disappear from the run. I changed that so the step always appears and the script prints a clear message if the zone ID is missing.</p>
+                    <p>That made troubleshooting much easier. Now the pipeline shows whether it uploaded files, skipped purge because configuration is missing, failed because the token is wrong, or successfully purged Cloudflare cache.</p>
+                </section>
+
+                <section>
+                    <h2>Infrastructure As Code With Bicep</h2>
+                    <p>After the live application was working, I started converting the manually created Azure resources into Bicep. The goal was not to immediately recreate everything, but to document and model the infrastructure so it can be reviewed, improved, and eventually redeployed safely.</p>
+                    <p>The current <code>infra/</code> folder includes modules for:</p>
+                    <ul>
+                        <li>Azure Storage static website configuration</li>
+                        <li>Cosmos DB Table API and the <code>Counter</code> table</li>
+                        <li>Azure Functions Flex Consumption plan</li>
+                        <li>Linux Python Function App</li>
+                        <li>Function runtime and deployment storage</li>
+                    </ul>
+                    <p>I also added a production parameters file that matches the resource names already deployed in Azure. The Bicep builds successfully, and the next step is to review detailed <code>what-if</code> output before applying it to production.</p>
+                </section>
+
+                <section>
+                    <h2>Problems I Solved</h2>
+                    <p>The most valuable parts of this project were the issues that forced me to slow down and verify the system end to end.</p>
+                    <ul>
+                        <li><strong>OIDC login failed:</strong> I used the GitHub Actions log to find the exact subject claim and created the matching federated credential in Azure.</li>
+                        <li><strong>Cloudflare vs Azure CDN confusion:</strong> I corrected the architecture and replaced the Azure CDN purge idea with a Cloudflare API purge.</li>
+                        <li><strong>Purge step visibility:</strong> I changed the workflow so the Cloudflare purge step always appears and explains whether it is running or skipping.</li>
+                        <li><strong>Cache behavior:</strong> I added purge automation so successful deployments show up quickly on the public domain.</li>
+                        <li><strong>IaC over existing resources:</strong> I used Bicep build and Azure <code>what-if</code> instead of blindly applying templates over manually created production resources.</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>What I Learned</h2>
+                    <p>This project helped connect a lot of cloud concepts that are often learned separately. Static hosting, serverless APIs, database access, DNS, caching, CI/CD, identity, and IaC all affect each other once the project is actually live.</p>
+                    <p>The biggest takeaway was that production-style work is less about one perfect deployment and more about repeatable troubleshooting. Reading logs carefully, narrowing the failing layer, avoiding secrets in source control, and validating changes before applying them all mattered.</p>
+                    <p>I also got a better feel for why infrastructure as code is useful even after resources already exist. The Bicep files now serve as documentation, a drift detection tool, and a path toward rebuilding the environment in a controlled way.</p>
+                </section>
+
+                <section>
+                    <h2>Next Improvements</h2>
+                    <p>The core challenge is complete, but there are several improvements I would like to make next:</p>
+                    <ul>
+                        <li>Add an architecture diagram and screenshots to the GitHub READMEs.</li>
+                        <li>Add an IaC GitHub Actions workflow that runs Bicep build and Azure <code>what-if</code>.</li>
+                        <li>Review the full Bicep <code>what-if</code> output and tune the modules before any production deployment.</li>
+                        <li>Document Cloudflare DNS, SSL/TLS mode, cache rules, and token permissions.</li>
+                        <li>Explore managed identity and RBAC as a future replacement for connection-string based access.</li>
+                        <li>Add stronger monitoring notes with Application Insights.</li>
+                    </ul>
+                    <p>For now, I am happy with the result: a live Azure-hosted resume site with a real backend, automated deployments, Cloudflare cache purge, and an IaC foundation that I can continue improving.</p>
+                </section>
+            </article>
+        </main>
+
+        <footer class="counter-section">
+            <p><a href="index.html">Return to resume</a> | <a href="https://github.com/MrGolbez" target="_blank" rel="noreferrer">View GitHub portfolio</a></p>
+        </footer>
+    </div>
+</body>
+</html>

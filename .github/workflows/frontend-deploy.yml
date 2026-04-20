@@ -6,7 +6,7 @@ on:
       - master
       - main
     paths:
-      - "index.html"
+      - "*.html"
       - "styles.css"
       - "visitor-counter.js"
       - ".github/workflows/frontend-deploy.yml"
@@ -37,6 +37,7 @@ jobs:
       - name: Validate static site files
         run: |
           test -f index.html
+          test -f blog.html
           test -f styles.css
           test -f visitor-counter.js
 
@@ -92,6 +93,7 @@ jobs:
           payload="$(jq -n --arg site "$SITE_URL" '{files: [
             $site + "/",
             $site + "/index.html",
+            $site + "/blog.html",
             $site + "/styles.css",
             $site + "/visitor-counter.js"
           ]}')"

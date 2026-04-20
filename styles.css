@@ -41,6 +41,25 @@ header {
     color: #ffffff;
 }
 
+.site-nav {
+    display: flex;
+    justify-content: flex-end;
+    gap: 18px;
+    margin-bottom: 28px;
+    font-size: 0.92rem;
+    font-weight: 700;
+}
+
+.site-nav a {
+    color: rgba(255, 255, 255, 0.78);
+    text-decoration: none;
+}
+
+.site-nav a[aria-current="page"],
+.site-nav a:hover {
+    color: #ffffff;
+}
+
 .eyebrow {
     display: inline-block;
     margin-bottom: 12px;
@@ -86,6 +105,10 @@ main {
     padding: 18px 48px 40px;
 }
 
+.article-layout {
+    padding-top: 34px;
+}
+
 section {
     margin-top: 26px;
 }
@@ -102,6 +125,50 @@ h2 {
     margin: 0;
     color: var(--ink-700);
     font-size: 1rem;
+}
+
+.article-meta {
+    margin: 0 0 26px;
+    color: var(--ink-500);
+    font-weight: 600;
+}
+
+.blog-article {
+    max-width: 800px;
+}
+
+.blog-article section {
+    margin-top: 34px;
+}
+
+.blog-article p {
+    margin: 0 0 16px;
+    color: var(--ink-700);
+}
+
+.blog-article code {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 0.94em;
+    color: var(--ink-900);
+}
+
+.blog-article pre {
+    overflow-x: auto;
+    margin: 16px 0;
+    padding: 16px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #f7fafc;
+}
+
+.counter-section a {
+    color: var(--accent);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.counter-section a:hover {
+    text-decoration: underline;
 }
 
 .skills-grid {
@@ -222,6 +289,11 @@ li {
 
     header {
         padding-top: 34px;
+    }
+
+    .site-nav {
+        justify-content: flex-start;
+        margin-bottom: 22px;
     }
 
     .skills-grid {
