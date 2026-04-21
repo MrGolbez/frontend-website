@@ -39,6 +39,7 @@ jobs:
           test -f index.html
           test -f blog.html
           test -f posts/2026-04-20-cloud-resume-challenge.html
+          test -f posts/2026-04-20-supply-chain-baseline.html
           test -f styles.css
           test -f visitor-counter.js
 

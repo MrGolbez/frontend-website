@@ -125,6 +125,7 @@ Current structure:
 blog.html
 posts/
   2026-04-20-cloud-resume-challenge.html
+  2026-04-20-supply-chain-baseline.html
 ```
 
 To add a new post:

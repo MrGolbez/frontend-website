@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapping My Cloud Resume Software Supply Chain - Marty Crane Jr</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav class="site-nav" aria-label="Primary navigation">
+                <a href="../index.html">Resume</a>
+                <a href="../blog.html" aria-current="page">Blog</a>
+            </nav>
+            <span class="eyebrow">Security | Supply Chain | DevSecOps</span>
+            <h1>Mapping My Cloud Resume Software Supply Chain</h1>
+            <p class="headline">Before adding security tools, I mapped how code moves from my laptop to GitHub, Azure, Cloudflare, and production.</p>
+        </header>
+
+        <main class="article-layout">
+            <article class="blog-article">
+                <p class="article-meta">April 20, 2026 | Security | Supply Chain | Cloud Resume Challenge</p>
+
+                <section>
+                    <h2>Why I Started With A Baseline</h2>
+                    <p>After finishing the core Azure Cloud Resume Challenge, I wanted to extend the project with the security version of the challenge: securing the software supply chain. My first instinct was to start adding tools right away, but that would have skipped an important step.</p>
+                    <p>Before adding CodeQL, Dependabot, SBOM generation, or vulnerability scanning, I needed to understand what I was protecting. That is what this first phase was about: mapping how code gets from my local machine to production and identifying where risk exists today.</p>
+                    <p>For anyone new to cloud or DevSecOps, this is a useful habit. A security tool is only helpful if you know which part of the system it protects.</p>
+                </section>
+
+                <section>
+                    <h2>What A Software Supply Chain Means</h2>
+                    <p>A software supply chain is everything involved in building, testing, deploying, and running software. It includes the code I write, the dependencies I install, the GitHub Actions workflows that run automation, the secrets and identities used for deployments, and the cloud services that receive the final application.</p>
+                    <p>Even a small resume site has a real supply chain. My project is not just an HTML file sitting on a server. It includes a frontend repo, a backend repo, an infrastructure repo, GitHub Actions, Azure resources, Cloudflare, Python dependencies, and deployment credentials.</p>
+                    <p>That means there are several places where a mistake or compromise could affect production.</p>
+                </section>
+
+                <section>
+                    <h2>The Repositories In Scope</h2>
+                    <p>I mapped three public GitHub repositories:</p>
+                    <ul>
+                        <li><strong>frontend-website:</strong> the static resume site, blog pages, visitor counter JavaScript, and frontend deployment workflow.</li>
+                        <li><strong>backend-api:</strong> the Python Azure Function that increments and returns the visitor count.</li>
+                        <li><strong>cloud-resume-infra:</strong> the Bicep infrastructure modules and project architecture documentation.</li>
+                    </ul>
+                    <p>Each repo has a different role, so each one has a different risk profile. The frontend repo can deploy public website changes. The backend repo owns application logic and Python dependencies. The infra repo describes the Azure resources that support the whole project.</p>
+                </section>
+
+                <section>
+                    <h2>Current Production Flow</h2>
+                    <p>The high-level software delivery path looks like this:</p>
+                    <pre><code>Developer workstation
+  -> Git commit
+  -> GitHub repository
+  -> GitHub Actions
+  -> Azure deployment target
+  -> Cloudflare cache purge
+  -> Public website and API</code></pre>
+                    <p>The live request path looks like this:</p>
+                    <pre><code>Visitor
+  -> Cloudflare DNS/CDN
+  -> Azure Storage Static Website
+  -> Browser JavaScript fetch()
+  -> Azure Function HTTP API
+  -> Cosmos DB Table API</code></pre>
+                    <p>Those two flows are related but not the same. The first is how code reaches production. The second is how users interact with the system after it is deployed. Both matter for security.</p>
+                </section>
+
+                <section>
+                    <h2>Frontend Supply Chain</h2>
+                    <p>The frontend repo currently has the strongest deployment controls. The GitHub Actions workflow logs in to Azure using OpenID Connect instead of a long-lived Azure client secret. That means GitHub receives a short-lived identity token, Azure validates the repo and branch, and the workflow gets access without storing an Azure password in GitHub.</p>
+                    <p>The frontend workflow also uses explicit permissions:</p>
+                    <pre><code>permissions:
+  id-token: write
+  contents: read</code></pre>
+                    <p>That is a good pattern because workflows should only receive the permissions they actually need.</p>
+                    <p>After uploading HTML, CSS, and JavaScript files to Azure Storage, the workflow calls Cloudflare's API to purge cache. That makes the public site update quickly instead of waiting for cached files to expire.</p>
+                    <p>Secrets and variables currently used by the frontend workflow are:</p>
+                    <ul>
+                        <li><code>AZURE_CLIENT_ID</code></li>
+                        <li><code>AZURE_TENANT_ID</code></li>
+                        <li><code>AZURE_SUBSCRIPTION_ID</code></li>
+                        <li><code>CLOUDFLARE_API_TOKEN</code></li>
+                        <li><code>CLOUDFLARE_ZONE_ID</code></li>
+                    </ul>
+                    <p>The important part is that none of those values are committed to the repo.</p>
+                </section>
+
+                <section>
+                    <h2>Backend Supply Chain</h2>
+                    <p>The backend repo contains the Azure Function and Python dependency list. It currently has a GitHub Actions workflow that installs dependencies and runs pytest.</p>
+                    <p>The dependency file is small, which is good for learning and auditing:</p>
+                    <ul>
+                        <li><code>azure-functions</code></li>
+                        <li><code>azure-data-tables==12.6.0</code></li>
+                        <li><code>pytest</code></li>
+                    </ul>
+                    <p>This repo is the best first target for SBOM and vulnerability scanning later because it has real runtime dependencies. If a vulnerable Python package is introduced, I want the pipeline to catch it before it ships.</p>
+                    <p>One thing I noted during the baseline is that the visible backend workflow is a test workflow. If deployment is handled elsewhere or added later, that path should be documented clearly so the security model is accurate.</p>
+                </section>
+
+                <section>
+                    <h2>Infrastructure Supply Chain</h2>
+                    <p>The infrastructure repo contains Bicep modules for the Azure resources behind the project. This includes the static website storage account, Cosmos DB Table API account, Function App, Flex Consumption plan, and Function runtime storage.</p>
+                    <p>This repo does not deploy automatically yet. That is intentional for now. The current safe use is validation:</p>
+                    <pre><code>az bicep build --file infra/main.bicep</code></pre>
+                    <p>And previewing changes before applying anything:</p>
+                    <pre><code>az deployment group what-if \
+  --resource-group rg-cloudresume-prod \
+  --template-file infra/main.bicep \
+  --parameters infra/main.parameters.json</code></pre>
+                    <p>Because the Azure resources were originally created manually, I do not want to blindly apply Bicep to production. The right next step is to review the full what-if output and tune the template until the proposed changes are expected.</p>
+                </section>
+
+                <section>
+                    <h2>Trust Boundaries</h2>
+                    <p>A trust boundary is a place where control changes hands. In this project, the main boundaries are:</p>
+                    <ul>
+                        <li><strong>My workstation:</strong> where code changes and commits start.</li>
+                        <li><strong>GitHub repositories:</strong> where source code, workflows, secrets, and variables live.</li>
+                        <li><strong>GitHub Actions runners:</strong> where tests and deployment automation execute.</li>
+                        <li><strong>Azure:</strong> where the static site origin, Function App, Cosmos DB, and storage resources live.</li>
+                        <li><strong>Cloudflare:</strong> where DNS, CDN, HTTPS, and cache purge are handled.</li>
+                    </ul>
+                    <p>Thinking in trust boundaries helped me organize the security work. Signed commits protect the path from workstation to GitHub. Branch protection helps control what reaches default branches. Code scanning and dependency scanning protect the CI path. OIDC reduces long-lived cloud credential risk.</p>
+                </section>
+
+                <section>
+                    <h2>What Was Already In Good Shape</h2>
+                    <p>The baseline showed a few good controls already in place:</p>
+                    <ul>
+                        <li>All three repos are public, which allows GitHub security features like CodeQL to be used more easily.</li>
+                        <li>Secret scanning is enabled on the repos.</li>
+                        <li>Push protection is enabled, which helps block accidental secret commits.</li>
+                        <li>The frontend deployment uses Azure OIDC instead of a stored Azure client secret.</li>
+                        <li>The frontend workflow uses minimal explicit permissions.</li>
+                        <li>Cloudflare cache purge is automated after frontend deployment.</li>
+                        <li>The infra repo now documents the current Azure architecture in Bicep.</li>
+                    </ul>
+                    <p>That is a decent starting point. The project is not starting from zero.</p>
+                </section>
+
+                <section>
+                    <h2>The Gaps I Found</h2>
+                    <p>The baseline also found several gaps that are worth fixing:</p>
+                    <ul>
+                        <li>Default branches are not protected yet.</li>
+                        <li>The latest checked commits are unsigned.</li>
+                        <li>Dependabot security updates are disabled.</li>
+                        <li>CodeQL is not enabled yet.</li>
+                        <li>The backend does not generate an SBOM yet.</li>
+                        <li>Grype or a second dependency vulnerability scanner is not configured yet.</li>
+                        <li>The infra repo does not have a Bicep build or what-if workflow yet.</li>
+                        <li>Cloudflare settings are operational but not fully documented as configuration.</li>
+                    </ul>
+                    <p>None of these findings are surprising. This is exactly why a baseline matters. It turns a vague goal like "secure the project" into a concrete checklist.</p>
+                </section>
+
+                <section>
+                    <h2>Why The Next Step Is Commit Signing And Branch Protection</h2>
+                    <p>The next phase will focus on repository trust and commit integrity. Before adding more scanners, I want to make sure changes to important branches are controlled.</p>
+                    <p>Signed commits help prove that commits came from a trusted identity. Branch protection or repository rules help prevent direct, unchecked changes to production branches. Required checks make sure automation passes before code is merged.</p>
+                    <p>For a solo project, this might feel like extra ceremony. But for cloud and security work, it is a practical habit. The same pattern scales to teams where multiple people can change code, workflows, or infrastructure.</p>
+                </section>
+
+                <section>
+                    <h2>What I Learned</h2>
+                    <p>The biggest lesson from Phase 1 is that supply-chain security starts with visibility. Before I can protect the pipeline, I need to know what the pipeline is.</p>
+                    <p>I also learned that a small project can still demonstrate real security thinking. This resume site has cloud identity, CI/CD, secrets, dependencies, DNS, CDN behavior, and infrastructure code. Those are the same categories that show up in larger systems, just at a smaller scale.</p>
+                    <p>Tomorrow's work will start Phase 2: signed commits and branch protection across the frontend, backend, and infrastructure repos.</p>
+                </section>
+            </article>
+        </main>
+
+        <footer class="counter-section">
+            <p><a href="../blog.html">Back to blog</a> | <a href="../index.html">Return to resume</a> | <a href="https://github.com/MrGolbez" target="_blank" rel="noreferrer">View GitHub portfolio</a></p>
+        </footer>
+    </div>
+</body>
+</html>
