@@ -137,6 +137,69 @@ h2 {
     max-width: 800px;
 }
 
+.blog-intro {
+    max-width: 760px;
+}
+
+.post-list {
+    display: grid;
+    gap: 18px;
+    margin-top: 28px;
+}
+
+.post-card {
+    padding: 22px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: #fbfdff;
+}
+
+.post-card-meta {
+    margin-bottom: 10px;
+    color: var(--ink-500);
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.post-card h2 {
+    margin-bottom: 10px;
+    font-size: 1.25rem;
+    letter-spacing: 0;
+    text-transform: none;
+}
+
+.post-card h2 a {
+    color: var(--ink-900);
+    text-decoration: none;
+}
+
+.post-card h2 a:hover {
+    color: var(--accent);
+}
+
+.post-card p {
+    margin: 0 0 16px;
+    color: var(--ink-700);
+}
+
+.read-more {
+    color: var(--accent);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.read-more:hover {
+    text-decoration: underline;
+}
+
+.read-more.is-disabled {
+    color: var(--ink-500);
+}
+
+.read-more.is-disabled:hover {
+    text-decoration: none;
+}
+
 .blog-article section {
     margin-top: 34px;
 }

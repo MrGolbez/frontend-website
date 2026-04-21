@@ -2,7 +2,7 @@
 
 Static frontend for my Azure Cloud Resume Challenge portfolio site: `https://martycrane.com`.
 
-This repo contains the public resume page, project blog page, visitor counter JavaScript, styling, and the GitHub Actions workflow that deploys the site to Azure Storage.
+This repo contains the public resume page, blog index, dated blog posts, visitor counter JavaScript, styling, and the GitHub Actions workflow that deploys the site to Azure Storage.
 
 ## What This Demonstrates
 
@@ -17,7 +17,8 @@ This repo contains the public resume page, project blog page, visitor counter Ja
 ## Site Pages
 
 - `index.html`: Resume and portfolio landing page
-- `blog.html`: Long-form Cloud Resume Challenge write-up
+- `blog.html`: Blog homepage with dated post links
+- `posts/`: Individual blog post pages
 - `styles.css`: Shared styling for the resume and blog pages
 - `visitor-counter.js`: Frontend logic for calling the visitor counter API
 
@@ -77,7 +78,7 @@ Deployment steps:
 2. Validate required static files
 3. Log in to Azure with OIDC
 4. Upload HTML, CSS, and JavaScript files to the Azure Storage `$web` container
-5. Purge Cloudflare cache for the homepage, blog page, and static assets
+5. Purge Cloudflare cache after a successful deploy
 
 Required GitHub Actions secrets:
 
@@ -113,6 +114,26 @@ Expected successful steps:
 - Azure login
 - Upload static site files
 - Purge Cloudflare cache
+
+## Blog Structure
+
+The blog is intentionally static and framework-free.
+
+Current structure:
+
+```text
+blog.html
+posts/
+  2026-04-20-cloud-resume-challenge.html
+```
+
+To add a new post:
+
+1. Create a dated HTML page under `posts/`.
+2. Add a card for it in `blog.html`.
+3. Commit and push.
+
+The deployment workflow watches both top-level HTML files and `posts/**/*.html`, so new posts trigger the frontend deployment pipeline.
 
 ## Infrastructure As Code
 

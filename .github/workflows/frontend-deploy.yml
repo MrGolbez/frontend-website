@@ -7,6 +7,7 @@ on:
       - main
     paths:
       - "*.html"
+      - "posts/**/*.html"
       - "styles.css"
       - "visitor-counter.js"
       - ".github/workflows/frontend-deploy.yml"
@@ -23,7 +24,6 @@ concurrency:
 env:
   AZURE_STORAGE_ACCOUNT: martycraneresume26
   CLOUDFLARE_ZONE_ID: ${{ vars.CLOUDFLARE_ZONE_ID }}
-  SITE_URL: https://martycrane.com
 
 jobs:
   deploy:
@@ -38,6 +38,7 @@ jobs:
         run: |
           test -f index.html
           test -f blog.html
+          test -f posts/2026-04-20-cloud-resume-challenge.html
           test -f styles.css
           test -f visitor-counter.js
 
@@ -90,13 +91,7 @@ jobs:
             exit 1
           fi
 
-          payload="$(jq -n --arg site "$SITE_URL" '{files: [
-            $site + "/",
-            $site + "/index.html",
-            $site + "/blog.html",
-            $site + "/styles.css",
-            $site + "/visitor-counter.js"
-          ]}')"
+          payload="$(jq -n '{purge_everything: true}')"
 
           response="$(curl --fail --silent --show-error --request POST \
             "https://api.cloudflare.com/client/v4/zones/$CLOUDFLARE_ZONE_ID/purge_cache" \
